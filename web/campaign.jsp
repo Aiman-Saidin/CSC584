@@ -51,10 +51,11 @@
                     <ul class="nav">
                      <li><a href="index.jsp">Home</a></li>
                      <li><a href="CouponManager.jsp">Coupon Manager</a></li>
-                      <li><a href="order.jsp">Order</a></li>
+                      <li><a href="products">Order</a></li>
                       <li><a href="campaign.jsp" class="active">Campaign</a></li>
                       <li><a href="login.jsp">Login</a></li>
                       <li><a href="#"><i class="fa fa-calendar"></i> Get your coupon</a></li>
+                      <li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i> Cart </a></li>
                   </ul>   
                     <a class='menu-trigger'>
                         <span>Menu</span>

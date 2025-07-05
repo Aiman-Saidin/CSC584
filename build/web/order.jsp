@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,26 +19,26 @@
     <link rel="stylesheet" href="assets/css/owl.css">
     <link rel="stylesheet" href="assets/css/animate.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-<style>
-.item {
-  text-align: center; /* Center image and content */
-}
+    <style>
+    .item {
+      text-align: center; /* Center image and content */
+    }
 
-.item img {
-  max-width: 100%;  /* Responsive scaling */
-  height: auto;     /* Maintain aspect ratio */
-  margin: 0 auto;   /* Center horizontally */
-  display: block;   /* Make margin auto work */
-}
-.item {
-  padding: 20px;
-}
+    .item img {
+      max-width: 100%;  /* Responsive scaling */
+      height: auto;     /* Maintain aspect ratio */
+      margin: 0 auto;   /* Center horizontally */
+      display: block;   /* Make margin auto work */
+    }
+    .item {
+      padding: 20px;
+    }
 
-.item img {
-  width: 80%;
-  max-width: 300px;
-}
-</style>
+    .item img {
+      width: 80%;
+      max-width: 300px;
+    }
+    </style>
   </head>
 
 <body>
@@ -71,10 +72,11 @@
                     <ul class="nav">
                       <li><a href="index.jsp">Home</a></li>
                      <li><a href="CouponManager.jsp">Coupon Manager</a></li>
-                      <li><a href="order.jsp" class="active">Order</a></li>
+                      <li><a href="products" class="active">Order</a></li>
                       <li><a href="campaign.jsp">Campaign</a></li>
                       <li><a href="login.jsp">Login</a></li>
                       <li><a href="#"><i class="fa fa-calendar"></i> Get your coupon</a></li>
+                      <li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i> Cart (${cartCount})</a></li>
                   </ul>   
                     <a class='menu-trigger'>
                         <span>Menu</span>
@@ -104,144 +106,53 @@
    
       <ul class="properties-filter">
         <li>
-          <a class="is_active" href="#!" data-filter="*">Show All</a>
+          <a class="is_active" href="products">Show All</a>
         </li>
         <li>
-          <a href="#!" data-filter=".adv">Fruits</a>
+          <a href="products?category=Fruits" data-filter=".adv">Fruits</a>
         </li>
         <li>
-          <a href="#!" data-filter=".str">Vegetables</a>
+          <a href="products?category=Vegetables" data-filter=".str">Vegetables</a>
         </li>
         <li>
-          <a href="#!" data-filter=".rac">Others</a>
+          <a href="products?category=Others" data-filter=".rac">Others</a>
         </li>
       </ul>
      <div class="row justify-content-center">
-        <!-- Product 1 -->
-        <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
-          <div class="card text-center p-3">
-            <img src="assets/images/fruit-1.png" class="card-img-top mx-auto" alt="Raspberries Sweet and Tangy" style="max-width: 150px;">
-            <div class="card-body">
-              <h5 class="card-title">Raspberries Sweet and Tangy</h5>
-              <p class="card-text">$15.00</p>
-              <p class="card-text">1 UNIT</p>
-              <a href="property-details.html" class="btn btn-primary">Add to cart</a>
+        <c:forEach var="product" items="${products}">
+          <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
+            <div class="card text-center p-3">
+              <img src="${product.imagePath}" class="card-img-top mx-auto" alt="${product.name}" style="max-width: 150px;">
+              <div class="card-body">
+                <h5 class="card-title">${product.name}</h5>
+                <p class="card-text">$${product.price}</p>
+                <p class="card-text">${product.description}</p>
+                <form action="cart" method="post">
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="productId" value="${product.id}">
+                    <button type="submit" class="btn btn-primary">Add to cart</button>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Product 1 -->
-        <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
-          <div class="card text-center p-3">
-            <img src="assets/images/fruit-2.png" class="card-img-top mx-auto" alt="Bananas Tasty and Tropical" style="max-width: 150px;">
-            <div class="card-body">
-              <h5 class="card-title">Bananas Tasty and Tropical</h5>
-              <p class="card-text">$10.00</p>
-              <p class="card-text">1 UNIT</p>
-              <a href="property-details.html" class="btn btn-primary">Add to cart</a>
-            </div>
-          </div>
-        </div>
-  <!-- Product 1 -->
-        <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
-          <div class="card text-center p-3">
-            <img src="assets/images/fruit-3.png" class="card-img-top mx-auto" alt="Avocados Creamy and Green" style="max-width: 150px;">
-            <div class="card-body">
-              <h5 class="card-title">Avocados Creamy and Green</h5>
-              <p class="card-text">$20.00</p>
-              <p class="card-text">1 UNIT</p>
-              <a href="property-details.html" class="btn btn-primary">Add to cart</a>
-            </div>
-          </div>
-        </div>
-  <!-- Product 1 -->
-        <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
-          <div class="card text-center p-3">
-            <img src="assets/images/vege-1.jpg" class="card-img-top mx-auto" alt="Broccoli Tasty and Nutritious" style="max-width: 150px;">
-            <div class="card-body">
-              <h5 class="card-title">Broccoli Tasty and Nutritious</h5>
-              <p class="card-text">$18.00</p>
-              <p class="card-text">1 UNIT</p>
-              <a href="property-details.html" class="btn btn-primary">Add to cart</a>
-            </div>
-          </div>
-        </div>
-  <!-- Product 1 -->
-        <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
-          <div class="card text-center p-3">
-            <img src="assets/images/vege-2.png" class="card-img-top mx-auto" alt="Tomatoes Sweet and Tangy" style="max-width: 150px;">
-            <div class="card-body">
-              <h5 class="card-title">Tomatoes Sweet and Tangy</h5>
-              <p class="card-text">$21.00</p>
-              <p class="card-text">1 UNIT</p>
-              <a href="property-details.html" class="btn btn-primary">Add to cart</a>
-            </div>
-          </div>
-        </div>
-        <!-- Product 1 -->
-        <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
-          <div class="card text-center p-3">
-            <img src="assets/images/vege-3.png" class="card-img-top mx-auto" alt="Cucumbers Crunchy and Clean" style="max-width: 150px;">
-            <div class="card-body">
-              <h5 class="card-title">Cucumbers Crunchy and Clean</h5>
-              <p class="card-text">$9.00</p>
-              <p class="card-text">1 UNIT</p>
-              <a href="property-details.html" class="btn btn-primary">Add to cart</a>
-            </div>
-          </div>
-        </div>
-        <!-- Product 1 -->
-        <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
-          <div class="card text-center p-3">
-            <img src="assets/images/other-1.png" class="card-img-top mx-auto" alt="Milk Fresh and Pure" style="max-width: 150px;">
-            <div class="card-body">
-              <h5 class="card-title">Milk Fresh and Pure</h5>
-              <p class="card-text">$5.00</p>
-              <p class="card-text">1 UNIT</p>
-              <a href="property-details.html" class="btn btn-primary">Add to cart</a>
-            </div>
-          </div>
-         </div>
-         <!-- Product 1 -->
-        <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
-          <div class="card text-center p-3">
-            <img src="assets/images/other-2.jpg" class="card-img-top mx-auto" alt="Junk food Salty and Satisfying" style="max-width: 150px;">
-            <div class="card-body">
-              <h5 class="card-title">Junk food Salty and Satisfying</h5>
-              <p class="card-text">$6.00</p>
-              <p class="card-text">1 UNIT</p>
-              <a href="property-details.html" class="btn btn-primary">Add to cart</a>
-            </div>
-          </div>
-        </div>
-        <!-- Product 1 -->
-        <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
-          <div class="card text-center p-3">
-            <img src="assets/images/other-3.png" class="card-img-top mx-auto" alt="Cookies Sweet and Crunchy" style="max-width: 150px;">
-            <div class="card-body">
-              <h5 class="card-title">Cookies Sweet and Crunchy</h5>
-              <p class="card-text">$11.00</p>
-              <p class="card-text">1 UNIT</p>
-              <a href="property-details.html" class="btn btn-primary">Add to cart</a>
-            </div>
-          </div>
-        </div>
+        </c:forEach>
       </div>
 
       <!-- Insert Coupon Codes -->
-<div class="row justify-content-center mt-4">
-  <div class="col-md-6">
-    <div class="card p-4">
-      <h5 class="mb-3 text-center">Have a Coupon?</h5>
-      <form id="apply-coupon-form">
-        <div class="input-group">
-          <input type="text" class="form-control" id="couponCode" placeholder="Enter coupon code">
-          <button class="btn btn-outline-primary" type="submit">Apply</button>
+      <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+          <div class="card p-4">
+            <h5 class="mb-3 text-center">Have a Coupon?</h5>
+            <form id="apply-coupon-form">
+              <div class="input-group">
+                <input type="text" class="form-control" id="couponCode" placeholder="Enter coupon code">
+                <button class="btn btn-outline-primary" type="submit">Apply</button>
+              </div>
+              <small class="form-text text-muted mt-2" id="couponFeedback"></small>
+            </form>
+          </div>
         </div>
-        <small class="form-text text-muted mt-2" id="couponFeedback"></small>
-      </form>
-    </div>
-  </div>
-</div>
+      </div>
 
       <div class="row">
         <div class="col-lg-12">
@@ -273,5 +184,5 @@
   <script src="assets/js/counter.js"></script>
   <script src="assets/js/custom.js"></script>
 
-  </body>
+</body>
 </html>
