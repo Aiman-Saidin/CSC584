@@ -50,7 +50,7 @@
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
                      <li><a href="index.jsp" class="active">Home</a></li>
-                     <li><a href="CouponManager.jsp">Coupon Manager</a></li>
+                     <li><a href="CouponManager">Coupon Manager</a></li>
                       <li><a href="products">Order</a></li>
                       <li><a href="campaign.jsp">Campaign</a></li>
                       <li><a href="login.jsp">Login</a></li>

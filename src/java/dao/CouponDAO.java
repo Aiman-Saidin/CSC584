@@ -2,8 +2,8 @@ package dao;
 
 import model.Coupon;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CouponDAO {
     private static final String JDBC_DRIVER = "org.apache.derby.jdbc.ClientDriver";
@@ -11,24 +11,172 @@ public class CouponDAO {
     private static final String USER = "app";
     private static final String PASS = "app";
     
-    // In-memory storage for simplicity (replace with database in production)
-    private static final Map<String, Coupon> coupons = new HashMap<>();
-    
-    static {
-        // Initialize with some sample coupons
-        coupons.put("SAVE10", new Coupon("SAVE10", 10, "PERCENT"));
-        coupons.put("FIVEOFF", new Coupon("FIVEOFF", 5, "FIXED"));
-        coupons.put("WELCOME20", new Coupon("WELCOME20", 20, "PERCENT"));
+    public List<Coupon> getAllCoupons() {
+        List<Coupon> coupons = new ArrayList<>();
+        Connection conn = null;
+        Statement stmt = null;
+        
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+            
+            String sql = "SELECT * FROM Coupon ORDER BY created_at DESC";
+            ResultSet rs = stmt.executeQuery(sql);
+            
+            while (rs.next()) {
+                Coupon coupon = new Coupon();
+                coupon.setCouponId(rs.getInt("coupon_id"));
+                coupon.setCode(rs.getString("code"));
+                coupon.setDiscountType(rs.getString("discount_type"));
+                coupon.setDiscountValue(rs.getDouble("discount_value"));
+                coupon.setExpirationDate(rs.getDate("expiration_date"));
+                coupon.setUsageLimit(rs.getInt("usage_limit"));
+                coupon.setIsActive(rs.getBoolean("is_active"));
+                coupon.setCampaignId(rs.getInt("campaign_id"));
+                coupon.setProductId(rs.getInt("product_id"));
+                coupon.setCreatedAt(rs.getTimestamp("created_at"));
+                
+                coupons.add(coupon);
+            }
+            
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return coupons;
     }
     
-    public Coupon getCouponByCode(String code) {
-        // For production, replace with database query
-        return coupons.get(code);
+    public boolean createCoupon(Coupon coupon) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        boolean success = false;
+        
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            
+            String sql = "INSERT INTO Coupon (code, discount_type, discount_value, " +
+                         "expiration_date, usage_limit, is_active, campaign_id, product_id) " +
+                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, coupon.getCode());
+            pstmt.setString(2, coupon.getDiscountType());
+            pstmt.setDouble(3, coupon.getDiscountValue());
+            pstmt.setDate(4, coupon.getExpirationDate());
+            
+            if (coupon.getUsageLimit() != null) {
+                pstmt.setInt(5, coupon.getUsageLimit());
+            } else {
+                pstmt.setNull(5, Types.INTEGER);
+            }
+            
+            pstmt.setBoolean(6, coupon.isIsActive());
+            
+            if (coupon.getCampaignId() != null) {
+                pstmt.setInt(7, coupon.getCampaignId());
+            } else {
+                pstmt.setNull(7, Types.INTEGER);
+            }
+            
+            if (coupon.getProductId() != null) {
+                pstmt.setInt(8, coupon.getProductId());
+            } else {
+                pstmt.setNull(8, Types.INTEGER);
+            }
+            
+            int rowsAffected = pstmt.executeUpdate();
+            success = rowsAffected > 0;
+            
+            pstmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return success;
     }
     
-    // Database version (uncomment if you want to use database instead)
-    /*
-    public Coupon getCouponByCode(String code) {
+    public boolean updateCoupon(Coupon coupon) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        boolean success = false;
+        
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            
+            String sql = "UPDATE Coupon SET code=?, discount_type=?, discount_value=?, " +
+                         "expiration_date=?, usage_limit=?, is_active=?, campaign_id=?, product_id=? " +
+                         "WHERE coupon_id=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, coupon.getCode());
+            pstmt.setString(2, coupon.getDiscountType());
+            pstmt.setDouble(3, coupon.getDiscountValue());
+            pstmt.setDate(4, coupon.getExpirationDate());
+            
+            if (coupon.getUsageLimit() != null) {
+                pstmt.setInt(5, coupon.getUsageLimit());
+            } else {
+                pstmt.setNull(5, Types.INTEGER);
+            }
+            
+            pstmt.setBoolean(6, coupon.isIsActive());
+            
+            if (coupon.getCampaignId() != null) {
+                pstmt.setInt(7, coupon.getCampaignId());
+            } else {
+                pstmt.setNull(7, Types.INTEGER);
+            }
+            
+            if (coupon.getProductId() != null) {
+                pstmt.setInt(8, coupon.getProductId());
+            } else {
+                pstmt.setNull(8, Types.INTEGER);
+            }
+            
+            pstmt.setInt(9, coupon.getCouponId());
+            
+            int rowsAffected = pstmt.executeUpdate();
+            success = rowsAffected > 0;
+            
+            pstmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return success;
+    }
+    
+    public Coupon getCouponById(int id) {
         Coupon coupon = null;
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -37,36 +185,74 @@ public class CouponDAO {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             
-            String sql = "SELECT * FROM coupons WHERE code = ?";
+            String sql = "SELECT * FROM Coupon WHERE coupon_id=?";
             pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, code);
+            pstmt.setInt(1, id);
             
             ResultSet rs = pstmt.executeQuery();
             
             if (rs.next()) {
                 coupon = new Coupon();
+                coupon.setCouponId(rs.getInt("coupon_id"));
                 coupon.setCode(rs.getString("code"));
-                coupon.setDiscountValue(rs.getDouble("discount_value"));
                 coupon.setDiscountType(rs.getString("discount_type"));
+                coupon.setDiscountValue(rs.getDouble("discount_value"));
+                coupon.setExpirationDate(rs.getDate("expiration_date"));
+                coupon.setUsageLimit(rs.getInt("usage_limit"));
+                coupon.setIsActive(rs.getBoolean("is_active"));
+                coupon.setCampaignId(rs.getInt("campaign_id"));
+                coupon.setProductId(rs.getInt("product_id"));
+                coupon.setCreatedAt(rs.getTimestamp("created_at"));
             }
             
             rs.close();
             pstmt.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch (SQLException se) {
             se.printStackTrace();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
-                if(pstmt != null) pstmt.close();
-                if(conn != null) conn.close();
-            } catch(SQLException se) {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
                 se.printStackTrace();
             }
         }
-        
         return coupon;
     }
-    */
+    
+    public boolean deleteCoupon(int couponId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        boolean success = false;
+
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String sql = "DELETE FROM Coupon WHERE coupon_id=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, couponId);
+
+            int rowsAffected = pstmt.executeUpdate();
+            success = rowsAffected > 0;
+
+            pstmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return success;
+    }
 }
