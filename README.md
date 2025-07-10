@@ -2,7 +2,9 @@ Note : Registering will only allow access to the order and checkout system. For 
 
 Admin login details :
 Username : admin
+
 Password : admin
+
 
 How to install the project into Netbeans 8.2:
 1. Go to Documents > NetBeansProjects
