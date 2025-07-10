@@ -1,3 +1,7 @@
+Link to the report/User Manual : https://drive.google.com/file/d/1HeaX0JI-ny3qnwNFsv31Bw7Q2GEfdJB3/view?usp=sharing
+
+
+
 Note : Registering will only allow access to the order and checkout system. For Coupon & Campaign Management, admin login is required.
 
 Admin login details :
