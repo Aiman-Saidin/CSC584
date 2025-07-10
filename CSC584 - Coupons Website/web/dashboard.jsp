@@ -225,22 +225,34 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
+                            <!-- In the recent orders table, add a new column -->
                             <table class="table table-bordered" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Order ID</th>
+                                        <th>Customer</th>
                                         <th>Date</th>
                                         <th>Amount</th>
-                                        <th>Status</th>
+                                        <th>Discount</th>
+                                        <th>Final Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <c:forEach var="order" items="${recentOrders}">
                                         <tr>
                                             <td>${order.orderId}</td>
+                                            <td>${order.username}</td>
                                             <td><fmt:formatDate value="${order.orderDate}" pattern="MMM dd, yyyy"/></td>
+                                            <td><fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="RM"/></td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${order.discountApplied != null}">
+                                                        <fmt:formatNumber value="${order.discountApplied}" type="currency" currencySymbol="RM"/>
+                                                    </c:when>
+                                                    <c:otherwise>-</c:otherwise>
+                                                </c:choose>
+                                            </td>
                                             <td><fmt:formatNumber value="${order.finalAmount}" type="currency" currencySymbol="RM"/></td>
-                                            <td>Completed</td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>

@@ -303,4 +303,51 @@ public class OrderDAO {
 
         return stats;
     }
+    
+    public List<Order> getRecentOrders(int limit) {
+        List<Order> orders = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String sql = "SELECT o.*, u.username FROM \"Order\" o " +
+                        "JOIN users u ON o.user_id = u.id " +
+                        "ORDER BY o.order_date DESC FETCH FIRST ? ROWS ONLY";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, limit);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Order order = new Order();
+                order.setOrderId(rs.getInt("order_id"));
+                order.setUserId(rs.getInt("user_id"));
+                order.setUsername(rs.getString("username")); // Add this to Order model
+                order.setTotalAmount(rs.getDouble("total_amount"));
+                order.setDiscountApplied(rs.getDouble("discount_applied"));
+                order.setFinalAmount(rs.getDouble("final_amount"));
+                order.setOrderDate(rs.getTimestamp("order_date"));
+
+                orders.add(order);
+            }
+
+            rs.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+
+        return orders;
+    }
 }

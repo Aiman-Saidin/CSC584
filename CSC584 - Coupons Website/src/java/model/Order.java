@@ -11,7 +11,8 @@ public class Order {
     private double finalAmount;
     private Timestamp orderDate;
     private List<OrderItem> items;
-
+    private String username;
+    
     // Constructors
     public Order() {}
 
@@ -45,4 +46,7 @@ public class Order {
     
     public List<OrderItem> getItems() { return items; }
     public void setItems(List<OrderItem> items) { this.items = items; }
+    
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 }

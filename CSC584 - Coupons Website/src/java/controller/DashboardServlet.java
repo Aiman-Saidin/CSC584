@@ -42,7 +42,7 @@ public class DashboardServlet extends HttpServlet {
         
         try {
             // For all users
-            List<Order> recentOrders = orderDAO.getRecentOrdersByUser(userId, 5);
+            List<Order> recentOrders = orderDAO.getRecentOrders(10);
             request.setAttribute("recentOrders", recentOrders);
             
             // For admin users
