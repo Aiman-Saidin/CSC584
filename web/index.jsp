@@ -1,4 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="javax.servlet.http.*,javax.servlet.*"%>
+
+<%
+  String username = (session != null) ? (String) session.getAttribute("username") : null;
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,15 +19,23 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="assets/css/fontawesome.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/templatemo-villa-agency.css">
     <link rel="stylesheet" href="assets/css/owl.css">
     <link rel="stylesheet" href="assets/css/animate.css">
-    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
   </head>
 
 <body>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<c:if test="${not empty checkoutSuccess}">
+    <div class="alert alert-success alert-dismissible fade show text-center">
+        ${checkoutSuccess}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <c:remove var="checkoutSuccess" scope="session"/>
+</c:if>
   <!-- ***** Preloader Start ***** -->
   <div id="js-preloader" class="js-preloader">
     <div class="preloader-inner">
@@ -48,15 +62,23 @@
                     </a>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
-                    <ul class="nav">
-                     <li><a href="index.jsp" class="active">Home</a></li>
-                     <li><a href="CouponManager">Coupon Manager</a></li>
-                      <li><a href="products">Order</a></li>
-                      <li><a href="campaign.jsp">Campaign</a></li>
+                   <ul class="nav">
+                    <li><a href="index.jsp" class="active">Home</a></li>
+                    <li><a href="CouponManager">Coupon Manager</a></li>
+                    <li><a href="products">Order</a></li>
+                    <li><a href="campaign.jsp">Campaign</a></li>
+                    
+                    <% if (username != null) { %>
+                      <li><a href="logout.jsp">Logout</a></li>
+                    <% } else { %>
                       <li><a href="login.jsp">Login</a></li>
-                      <li><a href="#"><i class="fa fa-calendar"></i> Get your coupon</a></li>
-                      <li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i> Cart </a></li>
-                  </ul>   
+                    <% } %>
+                    
+                    <li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+
+                    
+                   </ul>
+
                     <a class='menu-trigger'>
                         <span>Menu</span>
                     </a>
@@ -75,7 +97,6 @@
           <span class="category">Baling, <em>Malaysia</em></span>
           <h2>Hurry!<br>Let's Shop until you drop</h2>
         </div>
-      </div>
       </div>
     </div>
   </div>

@@ -1,5 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%
+  String username = (session != null) ? (String) session.getAttribute("username") : null;
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +18,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="assets/css/fontawesome.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/templatemo-villa-agency.css">
     <link rel="stylesheet" href="assets/css/owl.css">
     <link rel="stylesheet" href="assets/css/animate.css">
@@ -74,8 +78,11 @@
                      <li><a href="CouponManager">Coupon Manager</a></li>
                       <li><a href="products" class="active">Order</a></li>
                       <li><a href="campaign.jsp">Campaign</a></li>
-                      <li><a href="login.jsp">Login</a></li>
-                      <li><a href="#"><i class="fa fa-calendar"></i> Get your coupon</a></li>
+                      <% if (username != null) { %>
+                        <li><a href="logout.jsp">Logout</a></li>
+                      <% } else { %>
+                        <li><a href="login.jsp">Login</a></li>
+                      <% } %>
                       <li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i> Cart (${cartCount})</a></li>
                   </ul>   
                     <a class='menu-trigger'>
@@ -127,43 +134,22 @@
                 <h5 class="card-title">${product.name}</h5>
                 <p class="card-text">$${product.price}</p>
                 <p class="card-text">${product.description}</p>
-                <form action="cart" method="post">
+                <form action="cart" method="post" class="add-to-cart-form">
                     <input type="hidden" name="action" value="add">
                     <input type="hidden" name="productId" value="${product.id}">
                     <button type="submit" class="btn btn-primary">Add to cart</button>
                 </form>
+
+                
               </div>
             </div>
           </div>
         </c:forEach>
       </div>
 
-      <!-- Insert Coupon Codes -->
-      <div class="row justify-content-center mt-4">
-        <div class="col-md-6">
-          <div class="card p-4">
-            <h5 class="mb-3 text-center">Have a Coupon?</h5>
-            <form id="apply-coupon-form">
-              <div class="input-group">
-                <input type="text" class="form-control" id="couponCode" placeholder="Enter coupon code">
-                <button class="btn btn-outline-primary" type="submit">Apply</button>
-              </div>
-              <small class="form-text text-muted mt-2" id="couponFeedback"></small>
-            </form>
-          </div>
-        </div>
-      </div>
+      
 
-      <div class="row">
-        <div class="col-lg-12">
-          <ul class="pagination">
-            <li><a class="is_active" href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">>></a></li>
-          </ul>
-        </div>
-      </div>
+      
     </div>
   </div>
 
@@ -176,6 +162,36 @@
   </footer>
 
   <!-- Scripts -->
+  
+  <script>
+    $(document).ready(function() {
+        // Handle add to cart form submission
+        $('.add-to-cart-form').on('submit', function(e) {
+            e.preventDefault();
+            var form = $(this);
+
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(data) {
+                    // Update cart count in navbar
+                    $('.cart-count').text('Cart (' + data.cartCount + ')');
+
+                    // Show temporary success message
+                    var successMsg = $('<div class="alert alert-success">Item added to cart!</div>');
+                    form.append(successMsg);
+                    setTimeout(function() {
+                        successMsg.fadeOut();
+                    }, 2000);
+                },
+                error: function() {
+                    alert('Error adding item to cart');
+                }
+            });
+        });
+    });
+    </script>
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.min.js"></script>

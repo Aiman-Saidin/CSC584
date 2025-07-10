@@ -1,6 +1,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%
+    // Check if user is logged in
+    HttpSession userSession = request.getSession(false);
+    if (userSession == null || userSession.getAttribute("username") == null) {
+        response.sendRedirect("login.jsp");
+        return; // Important to stop further execution
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +23,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="assets/css/fontawesome.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/templatemo-villa-agency.css">
     <link rel="stylesheet" href="assets/css/owl.css">
     <link rel="stylesheet" href="assets/css/animate.css">
@@ -55,8 +63,7 @@
                      <li><a href="CouponManager" class="active">Coupon Manager</a></li>
                       <li><a href="products">Order</a></li>
                       <li><a href="campaign.jsp">Campaign</a></li>
-                      <li><a href="index.jsp">Logout</a></li>
-                      <li><a href="#"><i class="fa fa-calendar"></i> Get your coupon</a></li>
+                      <li><a href="logout.jsp">Logout</a></li>
                       <li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i> Cart </a></li>
                   </ul>   
                     <a class='menu-trigger'>
@@ -142,8 +149,8 @@
                                                name="expiration_date" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="usageLimit" class="form-label">Usage Limit (leave blank for unlimited)</label>
-                                        <input type="number" class="form-control" id="usageLimit" name="usage_limit">
+                                        <label for="usageLimit" class="form-label">Usage Limit (minimum 1)</label>
+                                        <input type="number" class="form-control" id="usageLimit" name="usage_limit" min="1">
                                     </div>
                                     <div class="mb-3">
                                         <label for="couponCampaign" class="form-label">Attach to Campaign (optional)</label>
@@ -151,6 +158,15 @@
                                             <option value="">-- No Campaign --</option>
                                             <c:forEach var="campaign" items="${campaigns}">
                                                 <option value="${campaign.campaignId}">${campaign.name}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="couponProduct" class="form-label">Apply to Product (optional)</label>
+                                        <select class="form-select" id="couponProduct" name="product_id">
+                                            <option value="">-- No Specific Product --</option>
+                                            <c:forEach var="product" items="${products}">
+                                                <option value="${product.id}">${product.name} ($${product.price})</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -367,6 +383,17 @@
                                     <option value="">-- No Campaign --</option>
                                     <c:forEach var="campaign" items="${campaigns}">
                                         <option value="${campaign.campaignId}">${campaign.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editProductId" class="form-label">Apply to Product</label>
+                                <select class="form-select" id="editProductId" name="product_id">
+                                    <option value="">-- No Specific Product --</option>
+                                    <c:forEach var="product" items="${products}">
+                                        <option value="${product.id}">${product.name} ($${product.price})</option>
                                     </c:forEach>
                                 </select>
                             </div>

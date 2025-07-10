@@ -3,6 +3,7 @@ package controller;
 import dao.ProductDAO;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,9 +38,9 @@ public class ProductServlet extends HttpServlet {
         
         request.setAttribute("products", products);
         
-        // Get cart count for display
+        // Get cart count for display - using Map now instead of List
         HttpSession session = request.getSession(false);
-        List<CartItem> cart = (session != null) ? (List<CartItem>) session.getAttribute("cart") : null;
+        Map<Integer, CartItem> cart = (session != null) ? (Map<Integer, CartItem>) session.getAttribute("cart") : null;
         int cartCount = (cart != null) ? cart.size() : 0;
         request.setAttribute("cartCount", cartCount);
         

@@ -3,7 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CSC584%20-%20Coupons%20Website/web/CouponManager.jsp</file>
+            <file>file:/C:/Users/User/Documents/NetBeansProjects/CSC584-main/web/index.jsp</file>
+            <file>file:/C:/Users/User/Documents/NetBeansProjects/CSC584-main/web/login.jsp</file>
+            <file>file:/C:/Users/User/Documents/NetBeansProjects/CSC584-main/web/campaign.jsp</file>
+            <file>file:/C:/Users/User/Documents/NetBeansProjects/CSC584-main/web/cart.jsp</file>
+            <file>file:/C:/Users/User/Documents/NetBeansProjects/CSC584-main/web/CouponManager.jsp</file>
+            <file>file:/C:/Users/User/Documents/NetBeansProjects/CSC584-main/web/order.jsp</file>
+            <file>file:/C:/Users/User/Documents/NetBeansProjects/CSC584-main/web/header.jsp</file>
         </group>
     </open-files>
 </project-private>

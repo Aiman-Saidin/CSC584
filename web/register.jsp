@@ -97,12 +97,12 @@
           </div>
         </div>
         <div class="col-lg-6">
-          <form id="contact-form" action="RegisterServlet" method="post">
+          <form id="contact-form" action="register" method="post">
             <div class="row">
               <div class="col-lg-12">
                 <fieldset>
                   <label for="name">Full Name</label>
-                  <input type="name" name="name" id="name" placeholder="Your Name..." autocomplete="on" required>
+                  <input type="text" name="name" id="name" placeholder="Your Name..." autocomplete="on" required>
                 </fieldset>
               </div>
               <div class="col-lg-12">

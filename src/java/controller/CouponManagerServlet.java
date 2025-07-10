@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Campaign;
 import model.Coupon;
+import model.Product;
 
 @WebServlet("/CouponManager")
 public class CouponManagerServlet extends HttpServlet {
@@ -35,10 +36,12 @@ public class CouponManagerServlet extends HttpServlet {
             // Get all coupons and campaigns
             List<Coupon> coupons = couponDAO.getAllCoupons();
             List<Campaign> campaigns = campaignDAO.getAllCampaigns();
+            List<Product> products = productDAO.getAllProducts();
             
             // Set attributes for JSP
             request.setAttribute("coupons", coupons);
             request.setAttribute("campaigns", campaigns);
+            request.setAttribute("products", products);
             
             // Check for messages from other servlets
             String message = (String) request.getSession().getAttribute("message");

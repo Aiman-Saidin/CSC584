@@ -1,4 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%
+  String username = (session != null) ? (String) session.getAttribute("username") : null;
+%>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,7 +19,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="assets/css/fontawesome.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/templatemo-villa-agency.css">
     <link rel="stylesheet" href="assets/css/owl.css">
     <link rel="stylesheet" href="assets/css/animate.css">
@@ -53,8 +59,11 @@
                      <li><a href="CouponManager">Coupon Manager</a></li>
                       <li><a href="products">Order</a></li>
                       <li><a href="campaign.jsp" class="active">Campaign</a></li>
-                      <li><a href="login.jsp">Login</a></li>
-                      <li><a href="#"><i class="fa fa-calendar"></i> Get your coupon</a></li>
+                      <% if (username != null) { %>
+                        <li><a href="logout.jsp">Logout</a></li>
+                      <% } else { %>
+                        <li><a href="login.jsp">Login</a></li>
+                      <% } %>
                       <li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i> Cart </a></li>
                   </ul>   
                     <a class='menu-trigger'>

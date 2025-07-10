@@ -2,23 +2,23 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <title>FoodMart</title>
+  <title>FoodMart</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="assets/css/fontawesome.css">
-    <link rel="stylesheet" href="assets/css/templatemo-villa-agency.css">
-    <link rel="stylesheet" href="assets/css/owl.css">
-    <link rel="stylesheet" href="assets/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-  </head>
+  <!-- Additional CSS Files -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/templatemo-villa-agency.css">
+  <link rel="stylesheet" href="assets/css/owl.css">
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+</head>
 
 <body>
 
@@ -34,35 +34,34 @@
     </div>
   </div>
   <!-- ***** Preloader End ***** -->
- 
 
   <!-- ***** Header Area Start ***** -->
   <header class="header-area header-sticky">
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <nav class="main-nav">
-                    <!-- ***** Logo Start ***** -->
-                    <a href="index.jsp" class="logo">
-                        <h1>FoodMart</h1>
-                    </a>
-                    <!-- ***** Logo End ***** -->
-                    <!-- ***** Menu Start ***** -->
-                    <ul class="nav">
-                     <li><a href="index.jsp">Home</a></li>
-                     <li><a href="CouponManager">Coupon Manager</a></li>
-                      <li><a href="products">Order</a></li>
-                      <li><a href="campaign.jsp">Campaign</a></li>
-                      <li><a href="login.jsp"  class="active">Login</a></li>
-                      <li><a href="#"><i class="fa fa-calendar"></i> Login Now</a></li>
-                  </ul>   
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
-                    <!-- ***** Menu End ***** -->
-                </nav>
-            </div>
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="index.jsp" class="logo">
+              <h1>FoodMart</h1>
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li><a href="index.jsp">Home</a></li>
+              <li><a href="CouponManager">Coupon Manager</a></li>
+              <li><a href="products">Order</a></li>
+              <li><a href="campaign.jsp">Campaign</a></li>
+              <li><a href="login.jsp" class="active">Login</a></li>
+              <li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+            </ul>
+            <a class='menu-trigger'>
+              <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
         </div>
+      </div>
     </div>
   </header>
   <!-- ***** Header Area End ***** -->
@@ -98,12 +97,22 @@
           </div>
         </div>
         <div class="col-lg-6">
-          <form id="contact-form" action="LoginServlet" method="post">
+
+          <% 
+            String success = request.getParameter("success");
+            if ("1".equals(success)) {
+          %>
+            <div class="alert alert-success" role="alert">
+              🎉 Registration successful! Please login below.
+            </div>
+          <% } %>
+
+          <form id="contact-form" action="login" method="post">
             <div class="row">
               <div class="col-lg-12">
                 <fieldset>
                   <label for="username">Username</label>
-                  <input type="username" name="username" id="username" placeholder="Enter Your Username" autocomplete="on" required>
+                  <input type="text" name="username" id="username" placeholder="Enter Your Username" autocomplete="on" required>
                 </fieldset>
               </div>
               <div class="col-lg-12">
@@ -112,17 +121,16 @@
                   <input type="password" name="password" id="password" placeholder="Enter Your Password" required="">
                 </fieldset>
               </div>
-             <div class="col-lg-12 d-flex justify-content-center gap-2">
-          <fieldset>
-            <button type="submit" id="login-button" class="orange-button">Login</button>
-          </fieldset>
-          <fieldset>
-            <button type="button" id="register-button" class="orange-button" onclick="window.location.href='register.jsp'">Register</button>
-          </fieldset>
-</div>
+              <div class="col-lg-12 d-flex justify-content-center gap-2">
+                <fieldset>
+                  <button type="submit" id="login-button" class="orange-button">Login</button>
+                </fieldset>
+                <fieldset>
+                  <button type="button" id="register-button" class="orange-button" onclick="window.location.href='register.jsp'">Register</button>
+                </fieldset>
+              </div>
             </div>
           </form>
-        </div>
         </div>
       </div>
     </div>
@@ -137,7 +145,6 @@
   </footer>
 
   <!-- Scripts -->
-  <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
   <script src="assets/js/isotope.min.js"></script>
@@ -145,5 +152,5 @@
   <script src="assets/js/counter.js"></script>
   <script src="assets/js/custom.js"></script>
 
-  </body>
+</body>
 </html>

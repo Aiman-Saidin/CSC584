@@ -134,7 +134,7 @@ public class CouponDAO {
             pstmt.setDouble(3, coupon.getDiscountValue());
             pstmt.setDate(4, coupon.getExpirationDate());
             
-            if (coupon.getUsageLimit() != null) {
+            if (coupon.getUsageLimit() != 0) {
                 pstmt.setInt(5, coupon.getUsageLimit());
             } else {
                 pstmt.setNull(5, Types.INTEGER);
@@ -254,5 +254,95 @@ public class CouponDAO {
             }
         }
         return success;
+    }
+    
+    public Coupon getCouponByCode(String code) {
+    Coupon coupon = null;
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+
+    try {
+        Class.forName(JDBC_DRIVER);
+        conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+        String sql = "SELECT * FROM coupon WHERE code = ?";
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, code);
+
+        ResultSet rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            coupon = new Coupon();
+            coupon.setCouponId(rs.getInt("coupon_id"));
+            coupon.setCode(rs.getString("code"));
+            coupon.setDiscountType(rs.getString("discount_type"));
+            coupon.setDiscountValue(rs.getDouble("discount_value"));
+            coupon.setExpirationDate(rs.getDate("expiration_date"));
+            coupon.setUsageLimit(rs.getInt("usage_limit"));
+            coupon.setIsActive(rs.getBoolean("is_active"));
+            coupon.setCampaignId(rs.getInt("campaign_id"));
+            coupon.setProductId(rs.getInt("product_id"));
+            coupon.setCreatedAt(rs.getTimestamp("created_at"));
+        }
+
+        rs.close();
+        pstmt.close();
+        conn.close();
+    } catch(SQLException se) {
+        se.printStackTrace();
+    } catch(Exception e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if(pstmt != null) pstmt.close();
+            if(conn != null) conn.close();
+        } catch(SQLException se) {
+            se.printStackTrace();
+        }
+    }
+
+    return coupon;
+}
+    
+    // Additional Validation
+    public boolean isCouponValidForUser(int couponId, int userId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        boolean isValid = false;
+
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            String sql = "SELECT c.* FROM Coupon c " +
+                        "WHERE c.coupon_id = ? " +
+                        "AND c.is_active = true " +
+                        "AND (c.expiration_date >= CURRENT_DATE OR c.expiration_date IS NULL) " +
+                        "AND (c.usage_limit IS NULL OR c.usage_limit > 0) " +
+                        "AND (c.product_id IS NULL OR EXISTS (SELECT 1 FROM Order_Item oi JOIN \"Order\" o ON oi.order_id = o.order_id " +
+                        "WHERE o.user_id = ? AND oi.product_id = c.product_id))";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, couponId);
+            pstmt.setInt(2, userId);
+
+            ResultSet rs = pstmt.executeQuery();
+            isValid = rs.next();
+
+            rs.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+
+        return isValid;
     }
 }
