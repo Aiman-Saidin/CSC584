@@ -18,6 +18,7 @@ How to install the project into Netbeans 8.2:
 
 How to install the database :
 Windows :
-1. Press the start menu and type in " %appdata%\NetBeans\Derby ".
-2. Drop FoodMartDB folder.
-3. Done!
+1. Press the start menu and type in run, then press enter.
+2. Type in " %appdata%\NetBeans\Derby " into the text box.
+3. Drop FoodMartDB folder in that location.
+4. Done!
