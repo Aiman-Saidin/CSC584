@@ -1,6 +1,7 @@
 Note : Registering will only allow access to the order and checkout system. For Coupon & Campaign Management, admin login is required.
 
 Admin login details :
+
 Username : admin
 
 Password : admin
